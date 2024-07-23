@@ -2,6 +2,10 @@ import { Schema, model, Document } from "mongoose";
 import { IUser } from "../types/index";
 
 const userSchema = new Schema<IUser>({
+	_id: {
+		type: String,
+		required: true,
+	},
 	firstName: {
 		type: String,
 		required: true,
@@ -22,6 +26,10 @@ const userSchema = new Schema<IUser>({
 	phoneNumber: {
 		type: String,
 		required: true,
+	},
+	salt: {
+		type: String,
+		required: false,
 	},
 });
 

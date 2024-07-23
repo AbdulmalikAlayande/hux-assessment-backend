@@ -1,5 +1,6 @@
 import { IUser } from "../types/index";
 import User from "../models/User";
+import bcrypt from "bcrypt";
 // import { UserModel } from "../models/UserModel";
 import { sign, verify } from "jsonwebtoken";
 import { Document } from "mongoose";
@@ -18,6 +19,11 @@ export class UserService {
 		user.email = userRequest.email;
 		user.firstName = userRequest.firstName;
 
+		const hash = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(userRequest.password, hash);
+
+		user.salt = hash;
+		user.password = hashedPassword;
 		// Logic to create a new user in the database
 		// using the provided user object
 		// Return the created user document
