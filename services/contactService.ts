@@ -1,17 +1,25 @@
-import Contact from "../models/contact";
 import { ContactRepository } from "../repositories/contactRepository";
 import { IContact } from "../types";
+import Contact from "../models/Contact";
 import { logger } from "../utils";
+import ResponseHandler from "../response/response";
+import { Request, Response } from "express";
 
 export class ContactService {
-	private contactRepository: ContactRepository;
+	private contactRepository: ContactRepository = new ContactRepository(
+		Contact
+	);
 
-	constructor(contactRepository: ContactRepository) {
-		this.contactRepository = contactRepository;
-	}
+	constructor() {}
 
-	async createContact(contact: IContact): Promise<IContact | null> {
+	async createContact(req: Request, res: Response): Promise<any> {
 		try {
+			const contact: IContact = new Contact();
+			const request = req.body;
+			if (!request) {
+				return ResponseHandler.badRequest;
+			}
+
 			const createdContact = await this.contactRepository.createContact(
 				contact
 			);

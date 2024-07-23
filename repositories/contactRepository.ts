@@ -13,7 +13,7 @@ export class ContactRepository {
 			const contact = new this.contactModel(contactData);
 			return await contact.save();
 		} catch (error) {
-			throw new Error(error);
+			throw error;
 		}
 	}
 
@@ -21,7 +21,7 @@ export class ContactRepository {
 		try {
 			return await this.contactModel.find().exec();
 		} catch (error) {
-			throw new Error(error);
+			throw error;
 		}
 	}
 
@@ -29,7 +29,7 @@ export class ContactRepository {
 		try {
 			return await this.contactModel.findById(contactId).exec();
 		} catch (error) {
-			throw new Error(error);
+			throw error;
 		}
 	}
 
@@ -42,7 +42,7 @@ export class ContactRepository {
 				.findByIdAndUpdate(id, data, { new: true })
 				.exec();
 		} catch (error) {
-			throw new Error(error);
+			throw error;
 		}
 	}
 
@@ -50,7 +50,7 @@ export class ContactRepository {
 		try {
 			return await this.contactModel.findByIdAndDelete(contactId).exec();
 		} catch (error) {
-			throw new Error(error);
+			throw error;
 		}
 	}
 }

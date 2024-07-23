@@ -1,30 +1,23 @@
 import { IUser } from "../types/index";
+import jwt from "jsonwebtoken";
+import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcrypt";
-import { sign, verify } from "jsonwebtoken";
-import { Document } from "mongoose";
 import userRepository from "../repositories/userRepository";
 
 export class UserService {
-	private readonly secretKey: string;
+	constructor() {}
 
-	constructor(secretKey: string) {
-		this.secretKey = secretKey;
-	}
-
-	async createUser(userRequest: IUser): Promise<object> {
+	async createUser(req: Request, res: Response): Promise<object> {
 		try {
-			const user = new User();
-			user.firstName = userRequest.firstName;
-			user.lastName = userRequest.lastName;
-			user.email = userRequest.email;
-			user.firstName = userRequest.firstName;
+			const { firstName, lastName, email, password } = req.body;
 
+			const user = new User();
+			user.firstName = firstName;
+			user.lastName = lastName;
+			user.email = email;
 			const hash = await bcrypt.genSalt(10);
-			const hashedPassword = await bcrypt.hash(
-				userRequest.password,
-				hash
-			);
+			const hashedPassword = await bcrypt.hash(password, hash);
 
 			user.salt = hash;
 			user.password = hashedPassword;
@@ -45,9 +38,12 @@ export class UserService {
 		}
 	}
 
-	async updateUser(userId: string): Promise<any> {
+	async updateUser(userId: string, userData: Partial<IUser>): Promise<any> {
 		try {
-			const updatedUser = await userRepository.updateUser(userId);
+			const updatedUser = await userRepository.updateUser(
+				userId,
+				userData
+			);
 			return { success: true, data: updatedUser };
 		} catch (error) {
 			throw error;
@@ -64,10 +60,21 @@ export class UserService {
 	}
 
 	generateToken(userId: string): string {
-		return "";
+		return jwt.sign(
+			{ userId },
+			process.env.JWT_SECRET || "your_jwt_secret",
+			{ expiresIn: "1h" }
+		);
 	}
 
 	verifyToken(token: string): string | object {
-		return "";
+		try {
+			return jwt.verify(
+				token,
+				process.env.JWT_SECRET || "your_jwt_secret"
+			);
+		} catch (error) {
+			throw error;
+		}
 	}
 }
