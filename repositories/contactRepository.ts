@@ -1,5 +1,4 @@
 import { Model } from "mongoose";
-import Contact from "../models/contact";
 import { IContact } from "../types";
 
 export class ContactRepository {
@@ -9,36 +8,49 @@ export class ContactRepository {
 		this.contactModel = contactModel;
 	}
 
-	// Add your repository methods here
-
-	// Example method: create a new contact
 	async createContact(contactData: Partial<IContact>): Promise<IContact> {
-		const contact = new this.contactModel(contactData);
-		return contact.save();
+		try {
+			const contact = new this.contactModel(contactData);
+			return await contact.save();
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 
-	// Example method: get all contacts
 	async getAllContacts(): Promise<IContact[]> {
-		return this.contactModel.find().exec();
+		try {
+			return await this.contactModel.find().exec();
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 
-	// Example method: get contact by ID
 	async getContactById(contactId: string): Promise<IContact | null> {
-		return this.contactModel.findById(contactId).exec();
+		try {
+			return await this.contactModel.findById(contactId).exec();
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 
-	// Example method: update contact by ID
 	async updateContactById(
-		contactId: string,
-		contactData: Partial<IContact>
+		id: string,
+		data: Partial<IContact>
 	): Promise<IContact | null> {
-		return this.contactModel
-			.findByIdAndUpdate(contactId, contactData, { new: true })
-			.exec();
+		try {
+			return await this.contactModel
+				.findByIdAndUpdate(id, data, { new: true })
+				.exec();
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 
-	// Example method: delete contact by ID
 	async deleteContactById(contactId: string): Promise<IContact | null> {
-		return this.contactModel.findByIdAndDelete(contactId).exec();
+		try {
+			return await this.contactModel.findByIdAndDelete(contactId).exec();
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
 }
