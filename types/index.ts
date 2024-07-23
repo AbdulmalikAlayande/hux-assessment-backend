@@ -7,3 +7,13 @@ export interface IUser extends Document {
 	phoneNumber: string;
 	salt?: string;
 }
+
+export interface IContact extends Document {
+	_id: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	phone: string;
+	createdAt: Date;
+	updatedAt: Date;
+}

@@ -64,16 +64,10 @@ export class UserService {
 	}
 
 	generateToken(userId: string): string {
-		// Logic to generate a JWT token for the provided userId
-		// using the secretKey
-		// Return the generated token
 		return "";
 	}
 
 	verifyToken(token: string): string | object {
-		// Logic to verify and decode a JWT token
-		// using the secretKey
-		// Return the decoded token payload if valid, otherwise throw an error
 		return "";
 	}
 }

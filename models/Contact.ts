@@ -1,15 +1,11 @@
-import { Schema, model, Document } from "mongoose";
-
-interface IContact extends Document {
-	firstName: string;
-	lastName: string;
-	email: string;
-	phone: string;
-	createdAt: Date;
-	updatedAt: Date;
-}
+import { Schema, model } from "mongoose";
+import { IContact } from "../types";
 
 const contactSchema = new Schema<IContact>({
+	_id: {
+		type: String,
+		required: true,
+	},
 	firstName: {
 		type: String,
 		required: true,
