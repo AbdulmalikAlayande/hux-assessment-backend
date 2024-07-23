@@ -10,7 +10,7 @@ interface UserRepository {
 	findAll(): Promise<IUser[]>;
 	// generateToken(user: IUser): string;
 	createUser(user: IUser): Promise<any>;
-	updateUser(id: string, user: IUser): Promise<any>;
+	updateUser(id: string): Promise<any>;
 	deleteUser(id: string): Promise<any>;
 }
 
@@ -28,11 +28,9 @@ const userRepository: UserRepository = {
 		}
 	},
 
-	async updateUser(id: string, user: IUser) {
+	async updateUser(id: string) {
 		try {
-			const foundUser = await User.findByIdAndUpdate(id, user, {
-				new: true,
-			});
+			const foundUser = await User.findByIdAndUpdate(id);
 			return foundUser ? foundUser.toJSON() : null;
 		} catch (error) {
 			throw error;
@@ -65,7 +63,6 @@ const userRepository: UserRepository = {
 		} catch (error) {
 			throw error;
 		}
-		return [];
 	},
 };
 
