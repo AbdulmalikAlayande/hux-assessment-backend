@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import { Response } from "express";
 
 export default class ResponseHandler {
 	static success(res: Response, data: any) {

@@ -1,7 +1,7 @@
-import ResponseHandler from "../response/response.js";
+import ResponseHandler from "../response/response";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import env from "dotenv";
-import userRepo from "../repositories/userRepository.js";
+import userRepo from "../repositories/userRepository";
 import { Request, Response, NextFunction } from "express";
 
 env.config();
@@ -20,7 +20,7 @@ const verifyAuth = async (
 			const token = req.headers.authorization.replace("Bearer ", "");
 			const obj = jwt.verify(
 				token,
-				process.env.JWT_SECRET || ""
+				process.env.JWT_SECRET || "123456789ABCDEFGHIJKLMNOP"
 			) as JwtPayload;
 			const userData = await userRepo.findById(obj.id);
 			req.user = userData;
