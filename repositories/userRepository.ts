@@ -1,4 +1,3 @@
-import { Model, Document } from "mongoose";
 import { IUser } from "../types/index";
 import User from "../models/User";
 import { DeleteResult } from "mongodb";
