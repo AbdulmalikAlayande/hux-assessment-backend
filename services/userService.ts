@@ -4,27 +4,29 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import userRepository from "../repositories/userRepository";
+import { logger } from "../utils";
 
 export class UserService {
 	constructor() {}
 
 	async createUser(req: Request, res: Response): Promise<object> {
 		try {
-			const { firstName, lastName, email, password } = req.body;
-
+			logger.info("In service createUser 1");
+			const { firstName, lastName, email, password, phoneNumber } =
+				req.body;
 			const user = new User();
 			user.firstName = firstName;
 			user.lastName = lastName;
 			user.email = email;
+			user.phoneNumber = phoneNumber;
 			const hash = await bcrypt.genSalt(10);
 			const hashedPassword = await bcrypt.hash(password, hash);
-
 			user.salt = hash;
 			user.password = hashedPassword;
-
 			const createdUser = await userRepository.createUser(user);
 			return { success: true, data: createdUser };
 		} catch (error) {
+			logger.error("Error occurred: ", error);
 			throw error;
 		}
 	}
@@ -32,6 +34,15 @@ export class UserService {
 	async getUserById(userId: string): Promise<any> {
 		try {
 			const foundUser = userRepository.findById(userId);
+			return { success: true, data: foundUser };
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getUserByEmail(email: string): Promise<any> {
+		try {
+			const foundUser = userRepository.findByEmail(email);
 			return { success: true, data: foundUser };
 		} catch (error) {
 			throw error;
@@ -59,10 +70,10 @@ export class UserService {
 		}
 	}
 
-	generateToken(userId: string): string {
+	generateToken(email: string): string {
 		return jwt.sign(
-			{ userId },
-			process.env.JWT_SECRET || "your_jwt_secret",
+			{ email },
+			process.env.JWT_SECRET || "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 			{ expiresIn: "1h" }
 		);
 	}
